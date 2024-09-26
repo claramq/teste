@@ -19,14 +19,25 @@ class Personagem {
 
     calcularDano(comoAtacar) {
         if (comoAtacar === "forte") {
-            this.forca -= 30; // Perde 20 de força
+            if (this.forca >= 35) {
+                this.forca -= 35; // Perde 30 de força
+            } else {
+                console.log("Força insuficiente para atacar com força forte.");
+                return false; // Indica que o ataque falhou
+            }
         } else if (comoAtacar === "fraca") {
-            this.forca -= 15; // Perde 10 de força
-            this.vida -= 15; // Perde 10 de vida
+            if (this.forca >= 15) {
+                this.forca -= 15; // Perde 15 de força
+                this.vida -= 20; // Perde 15 de vida
+            } else {
+                console.log("Força insuficiente para atacar com força fraca.");
+                return false; // Indica que o ataque falhou
+            }
         } else if (comoAtacar === "não atacar") {
-            this.vida -= 30; // Perde 20 de vida
+            this.vida -= 35; // Perde 30 de vida
         }
         this.exibirStatus(); // Exibe status após a ação
+        return true; // Indica que o ataque foi bem-sucedido
     }
 
     estaVivo() {
@@ -59,9 +70,13 @@ function perguntarComoAtacar(inimigo) {
     const ataque = prompt(`Como você deseja atacar ${inimigo}? (fraca/forte/não atacar)`).toLowerCase();
     
     if (ataque === "fraca" || ataque === "forte" || ataque === "não atacar") {
-        jogador.calcularDano(ataque);
-        rodada++; // Avança para a próxima rodada
-        setTimeout(jogarRodada, 100); // Passa para a próxima rodada
+        const sucesso = jogador.calcularDano(ataque);
+        if (sucesso) {
+            rodada++; // Avança para a próxima rodada se o ataque for bem-sucedido
+            setTimeout(jogarRodada, 100); // Passa para a próxima rodada
+        } else {
+            perguntarComoAtacar(inimigo); // Pergunta novamente se o ataque falhou
+        }
     } else {
         console.log("Opção inválida. Tente novamente.");
         perguntarComoAtacar(inimigo); // Pergunta novamente
