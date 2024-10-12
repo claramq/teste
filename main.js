@@ -3,7 +3,7 @@ class Personagem {
         this.nome = nome;
         this.vida = 100;
         this.forca = 100;
-        this.felicidade = 100; // Recurso de felicidade
+        this.felicidade = 100;
     }
 
     exibirStatus() {
@@ -11,19 +11,19 @@ class Personagem {
     }
 
     enfrentarDesafio(rodada) {
-        const inimigos = ["Alisson Zile", "Leonardo", "Danielle", "Arthur", "Jamerson"];
+        const inimigos = ["Alison Zille", "Leonardo", "Danielle", "Arthur", "Jamerson"];
         const inimigo = inimigos[rodada - 1];
-        console.log(`${this.nome} encontrou o inimigo: ${inimigo}!`);
+        alert(`${this.nome} encontrou o inimigo: ${inimigo}!`);
         return inimigo;
     }
 
     mensagemInimigo(inimigo) {
         const mensagens = {
-            "Alisson Zile": "Cuidado: não use chatgpt nos trabalhos!",
+            "Alison Zille": "Cuidado: não use chatgpt nos trabalhos!",
             "Leonardo": "Tome cuidado com o sorteio, principalmente se você for o número 34!",
             "Danielle": "Não coma nada dentro do laboratório!",
-            "Arthur": "Se prepare para a recuperação!",
-            "Jamerson": "Cuidado com a Comissão!"
+            "Arthur": "Não se deixe enganar, nem tudo é HTML",
+            "Jamerson": "Se prepare para a recuperação!"
         };
         return mensagens[inimigo] || "";
     }
@@ -34,80 +34,88 @@ class Personagem {
 
         if (comoAtacar === "forte") {
             if (this.forca >= 35) {
-                this.forca -= 35; // Perde 35 de força
+                this.forca -= 35;
                 perdaForca = 35;
             } else {
-                console.log("Força insuficiente para atacar com força forte.");
-                return false; // Indica que o ataque falhou
+                alert("Força insuficiente para atacar com força forte.");
+                return false;
             }
         } else if (comoAtacar === "fraco") {
             if (this.forca >= 15) {
-                this.forca -= 15; // Perde 15 de força
+                this.forca -= 15;
                 perdaForca = 15;
-                this.vida -= 20; // Perde 20 de vida
+                this.vida -= 20;
                 perdaVida = 20;
             } else {
-                console.log("Força insuficiente para atacar com força fraco.");
-                return false; // Indica que o ataque falhou
+                alert("Força insuficiente para atacar com força fraco.");
+                return false;
             }
         } else if (comoAtacar === "não atacar") {
-            this.vida -= 35; // Perde 35 de vida
+            this.vida -= 35;
             perdaVida = 35;
         }
 
-        this.felicidade -= 10; // Perde 10 de felicidade a cada ação
-        this.exibirStatus(); // Exibe status após a ação
-        
-        // Informações sobre perdas
-        console.log(`Você perdeu ${perdaForca} de Força, ${perdaVida} de Vida e 10 de Felicidade.`);
-        return true; // Indica que o ataque foi bem-sucedido
+        this.felicidade -= 20;
+        return true;
     }
 
     estaVivo() {
-        return this.vida > 0 && this.felicidade > 0; // O personagem deve estar vivo e feliz
+        return this.vida > 0;
+    }
+
+    perderVidaPorRodada() {
+        this.vida -= 0;
     }
 }
 
 let rodada = 1;
-const maxRodadas = 5; // Atualizado para 5 rodadas
-const jogador = new Personagem("Aluno"); // Nome alterado para "Aluno"
+const maxRodadas = 5;
+const jogador = new Personagem("Aluno");
 
 function start() {
-    console.log("O jogo começou!");
-    console.log("Era uma vez um aluno feliz, esperançoso e sonhador, que desejava se tornar um técnico em informática. Mal sabia ele o que o esperava...");
-    jogador.exibirStatus(); // Exibe os recursos iniciais
+    alert("Era uma vez um aluno feliz, esperançoso e sonhador, que desejava se tornar um técnico em informática. Mal sabia ele o que o esperava...");
+    jogador.exibirStatus();
     jogarRodada();
 }
 
 function jogarRodada() {
     if (rodada <= maxRodadas && jogador.estaVivo()) {
-        console.log(`\nRodada ${rodada}`);
+        console.log(`Rodada ${rodada}`);
         const inimigo = jogador.enfrentarDesafio(rodada);
-        console.log(jogador.mensagemInimigo(inimigo)); // Exibe a mensagem do inimigo
+        alert(jogador.mensagemInimigo(inimigo));
         perguntarComoAtacar(inimigo);
     } else if (jogador.estaVivo()) {
-        console.log("Parabéns! Você venceu o jogo!");
+        alert("Parabéns! Você venceu o jogo! Mas entrou em depressão, se pepare para a próxima fase: a terapia!");
     } else {
-        console.log("Você foi derrotado... Tente novamente!");
+        alert("Você foi derrotado... Tente novamente!");
     }
 }
 
 function perguntarComoAtacar(inimigo) {
-    const ataque = prompt(`Como você deseja atacar ${inimigo}? (fraco/forte/não atacar)`).toLowerCase();
-    
-    if (ataque === "fraco" || ataque === "forte" || ataque === "não atacar") {
-        const sucesso = jogador.calcularDano(ataque);
-        if (sucesso) {
-            rodada++; // Avança para a próxima rodada se o ataque for bem-sucedido
-            setTimeout(jogarRodada, 100); // Passa para a próxima rodada
-        } else {
-            perguntarComoAtacar(inimigo); // Pergunta novamente se o ataque falhou
-        }
+   
+    const escolha = prompt(`Você encontrou ${inimigo}. Como você deseja atacar?\n1 - Atacar fraco\n2 - Atacar forte\n3 - Não atacar`);
+
+    let ataque;
+    if (escolha === "1") {
+        ataque = "fraco";
+    } else if (escolha === "2") {
+        ataque = "forte";
+    } else if (escolha === "3") {
+        ataque = "não atacar";
     } else {
-        console.log("Opção inválida. Tente novamente.");
-        perguntarComoAtacar(inimigo); // Pergunta novamente
+        alert("Opção inválida. Tente novamente.");
+        perguntarComoAtacar(inimigo);
+        return;
+    }
+    
+    const sucesso = jogador.calcularDano(ataque);
+    if (sucesso) {
+        rodada++; 
+        jogador.perderVidaPorRodada(); 
+        console.log(`Status de ${jogador.nome} após a rodada: Vida = ${jogador.vida}, Força = ${jogador.forca}, Felicidade = ${jogador.felicidade}`);
+        setTimeout(jogarRodada, 100);
+    } else {
+        perguntarComoAtacar(inimigo);
     }
 }
 
-// Inicia o jogo
-start();
